@@ -1,7 +1,13 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 import {createPlaylist} from './createPlaylist.js';
 import {getRecommendations} from './getRecommendations.js';
+import { Button, 
+         Container, 
+         TextField,
+         Input
+        }
+from '@material-ui/core';
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -79,28 +85,29 @@ function App(props){
 
   return (
     <div className="App">
+      <Container maxWidth="md">
       {!loggedIn && 
       <a href='http://localhost:8888' > Login to Spotify </a>
       }
       { loggedIn && // Start building the app
         <div>
           <p>Welcome to the app</p>
-          <form onSubmit={() => startApp()}>
-            <label>
-              Playlist Name:
-              <input type="text" value={playlistName} 
-                     onChange={e => setPlaylistName(e.target.value)}  />
-            </label>
-            <label>
-              Number of songs:
-              <input type="number" value={seeds.limit} 
-                     onChange={e => setSeeds({limit:e.target.value})} />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
 
+          <Input placeholder="Playlist Name" inputProps={{ 'aria-label': 'description' }} 
+              value={playlistName} onChange={e => setPlaylistName(e.target.value)} 
+              helperText="The name you want the generated playlist to be"/>
+
+          <Input placeholder="Number of Songs" inputProps={{ 'aria-label': 'description' }} 
+              type="number" size="small" value={seeds.limit} 
+              onChange={e => setSeeds({limit:e.target.value})}
+              helperText="The limit of songs you want in the playlist"/>
+
+          <Button size="small" variant="contained" color="primary" onClick={() => startApp()}>
+            Submit
+          </Button>
+          
         </div>
-      }
+      }</Container>
     </div>
   );
   
