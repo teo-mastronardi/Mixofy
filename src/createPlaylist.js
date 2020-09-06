@@ -2,7 +2,7 @@ export async function createPlaylist(spotifyApi,playlistName) {
     var playlistInfo = {
         name:playlistName,
         public:false, 
-        description:"Playlist Generated automatically based on your feedback by Mixofy."
+        description:"Playlist generated automatically based on your feedback by Mixofy."
       }
       // Create playlist
     try{
