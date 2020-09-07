@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
-import {GENRES} from "./constants.js"
+import {GENRES} from "../constants.js"
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -54,7 +54,6 @@ export function DialogGenreSelect(props) {
   const [genre, setGenre] = React.useState([]);
 
   const handleChange = (event) => {
-      console.log("in genre select",event.target.value)
     setGenre(event.target.value);
     props.sendData(event.target.value);
   };
@@ -62,7 +61,7 @@ export function DialogGenreSelect(props) {
   return (
     <div>
       <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">Select up to five Genres</InputLabel>
+        <InputLabel id="demo-mutiple-chip-label">Select up to five genres</InputLabel>
         <Select
           labelId="demo-mutiple-chip-label"
           id="demo-mutiple-chip"
@@ -70,7 +69,6 @@ export function DialogGenreSelect(props) {
           value={genre}
           onChange={handleChange}
           input={<Input id="select-multiple-chip" />}
-          placeholder="Select up to five Genres"
           renderValue={(selected) => (
             <div className={classes.chips}>
               {selected.map((value) => (

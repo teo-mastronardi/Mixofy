@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 import {createPlaylist} from './createPlaylist.js';
 import {getRecommendations} from './getRecommendations.js';
-import {DialogGenreSelect} from './genreSelect.js';
+import {DialogGenreSelect} from './components/genreSelect.js';
+import {RangeSlider} from './components/rangeSlider.js';
+
 import { Button, 
          Container, 
-         TextField,
-         Input
+         //TextField,
+         Input,
         }
 from '@material-ui/core';
 
@@ -54,8 +56,8 @@ function App(props){
    
    const loggedIn = token ? true : false;
    const [playlistName, setPlaylistName] = useState('')
-   const [startYear, setStartYear] = useState(1900)
-   const [endYear, setEndYear] = useState(1900)
+   //const [startYear, setStartYear] = useState(1900)
+   //const [endYear, setEndYear] = useState(1900)
 
    
    useEffect(() => {
@@ -81,10 +83,8 @@ function App(props){
     spotifyApi.addTracksToPlaylist(playlistId,uris)
   }
 
-  function getData(data){
-    console.log("in set data", data)
-    setSeeds({...seeds, seed_genres:data}); 
-    console.log(seeds)    
+  function getData(data){ // Need switch statements here
+    setSeeds({...seeds, value:data}); 
   }
 
   return (
@@ -109,7 +109,12 @@ function App(props){
               />
 
           <DialogGenreSelect sendData={getData}/>
-          
+
+          <RangeSlider type="Beats Per Minute" min={50} max={200} start={100} end={140} step={2}/>
+          <RangeSlider type="Popularity" min={0} max={100} start={40} end={100} step={5}/>
+          {/* Advanced Section?? */}
+          <RangeSlider type="Energy" min={0} max={1} start={0} end={.5} step={.1}/>
+
           <Button size="small" variant="contained" color="primary" onClick={() => startApp()}>
             Submit
           </Button>
