@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 import {createPlaylist} from './createPlaylist.js';
 import {getRecommendations} from './getRecommendations.js';
+import {DialogGenreSelect} from './genreSelect.js';
 import { Button, 
          Container, 
          TextField,
@@ -33,7 +34,7 @@ function App(props){
   // Change this to something persistent 
 
   const [seeds, setSeeds] = useState({
-    seed_genres:"edm,electronic",
+    seed_genres:[],  
     seed_artists:"",
     seed_tracks:"",
     limit:10,
@@ -58,9 +59,6 @@ function App(props){
 
    
    useEffect(() => {
-     console.log(playlistName)
-     console.log(seeds.limit)
-    //\\setPlaylistName(name)
 
     // setValues({
     //   …form,
@@ -83,25 +81,35 @@ function App(props){
     spotifyApi.addTracksToPlaylist(playlistId,uris)
   }
 
+  function getData(data){
+    console.log("in set data", data)
+    setSeeds({...seeds, seed_genres:data}); 
+    console.log(seeds)    
+  }
+
   return (
     <div className="App">
-      <Container maxWidth="md">
+      <Container maxWidth="md" >
       {!loggedIn && 
       <a href='http://localhost:8888' > Login to Spotify </a>
       }
-      { loggedIn && // Start building the app
+      { loggedIn && 
         <div>
           <p>Welcome to the app</p>
 
           <Input placeholder="Playlist Name" inputProps={{ 'aria-label': 'description' }} 
               value={playlistName} onChange={e => setPlaylistName(e.target.value)} 
-              helperText="The name you want the generated playlist to be"/>
+              //helperText="The name you want the generated playlist to be"
+              />
 
           <Input placeholder="Number of Songs" inputProps={{ 'aria-label': 'description' }} 
-              type="number" size="small" value={seeds.limit} 
-              onChange={e => setSeeds({limit:e.target.value})}
-              helperText="The limit of songs you want in the playlist"/>
+              type="number" size="small" value={seeds.limit}
+              onChange={e => setSeeds({...seeds,limit:e.target.value})}
+              //helperText="The limit of songs you want in the playlist"
+              />
 
+          <DialogGenreSelect sendData={getData}/>
+          
           <Button size="small" variant="contained" color="primary" onClick={() => startApp()}>
             Submit
           </Button>
