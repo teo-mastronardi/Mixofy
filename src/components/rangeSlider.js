@@ -47,7 +47,8 @@ export function RangeSlider(props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    console.log(newValue)
+    props.sendData(newValue, props.type);
+
   };
 
   return (

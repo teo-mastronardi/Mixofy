@@ -55,7 +55,7 @@ export function DialogGenreSelect(props) {
 
   const handleChange = (event) => {
     setGenre(event.target.value);
-    props.sendData(event.target.value);
+    props.sendData(event.target.value, "seed_genres");
   };
 
   return (

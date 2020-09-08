@@ -40,25 +40,13 @@ function App(props){
     seed_artists:"",
     seed_tracks:"",
     limit:10,
-    min_tempo:140,
-    max_temp: 300,
-    min_popularity:50,
-    max_popularity:100,
-    min_acoustiness:0.0,
-    max_acoustiness:1.0,
-    min_danceability: 0.0,
-    max_danceanility:1.0,
-    min_energy:0.0,
-    max_energy:1.0,
-    min_instrumentalness:0.0,
-    max_instrumentalness:1.0
    })
    
    const loggedIn = token ? true : false;
    const [playlistName, setPlaylistName] = useState('')
    //const [startYear, setStartYear] = useState(1900)
    //const [endYear, setEndYear] = useState(1900)
-
+   const [nonRange, setNonRange] =useState(["seed_genres","seed_artists","seed_tracks","limit"])
    
    useEffect(() => {
 
@@ -67,6 +55,8 @@ function App(props){
     //   first: ‘Jamie’,
     //   subscribe: true
     //  })
+    console.log(seeds)
+
    })
 
    async function startApp() {
@@ -83,8 +73,16 @@ function App(props){
     spotifyApi.addTracksToPlaylist(playlistId,uris)
   }
 
-  function getData(data){ // Need switch statements here
-    setSeeds({...seeds, value:data}); 
+  function getData(data,type){ 
+
+    if(!nonRange.includes(type)){
+      var min = "min_"+type.toLowerCase();
+      var max = "max_"+type.toLowerCase();
+      setSeeds({...seeds, [min]:data[0],[max]:data[1]});
+    }
+    else{
+      setSeeds({...seeds, [type.toLowerCase()]:data}); 
+    }
   }
 
   return (
@@ -110,10 +108,14 @@ function App(props){
 
           <DialogGenreSelect sendData={getData}/>
 
-          <RangeSlider type="Beats Per Minute" min={50} max={200} start={100} end={140} step={2}/>
-          <RangeSlider type="Popularity" min={0} max={100} start={40} end={100} step={5}/>
+          <RangeSlider type="Tempo" min={50} max={200} start={0} end={0} step={2} sendData={getData}/>
+          <RangeSlider type="Popularity" min={0} max={100} start={0} end={0} step={5} sendData={getData}/>
           {/* Advanced Section?? */}
-          <RangeSlider type="Energy" min={0} max={1} start={0} end={.5} step={.1}/>
+          <RangeSlider type="Energy" min={0} max={1} start={0} end={0} step={.1} sendData={getData}/>
+          <RangeSlider type="Danceability" min={0} max={1} start={0} end={0} step={.1} sendData={getData}/>
+          <RangeSlider type="Acousticness" min={0} max={1} start={0} end={0} step={.1} sendData={getData}/>
+
+          <RangeSlider type="Instrumentalness" min={0} max={1} start={0} end={0} step={.1} sendData={getData}/>
 
           <Button size="small" variant="contained" color="primary" onClick={() => startApp()}>
             Submit
