@@ -54,7 +54,7 @@ export function RangeSlider(props) {
   return (
     <div className={classes.root}>
       <Typography id="range-slider" gutterBottom>
-        {props.type} Range
+        {props.type == "Tempo"? props.type + ' (BPM)' : props.type} Range
       </Typography>
       <PrettoSlider
         value={value}

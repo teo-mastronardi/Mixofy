@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 import {createPlaylist} from './createPlaylist.js';
 import {getRecommendations} from './getRecommendations.js';
+import {getPlaylistCover} from './getPlaylistCover.js';
 import {DialogGenreSelect} from './components/genreSelect.js';
 import {RangeSlider} from './components/rangeSlider.js';
 
@@ -47,6 +48,11 @@ function App(props){
    //const [startYear, setStartYear] = useState(1900)
    //const [endYear, setEndYear] = useState(1900)
    const [nonRange, setNonRange] =useState(["seed_genres","seed_artists","seed_tracks","limit"])
+
+   const [loading, setLoading] = useState(false)
+   const [done, setDone] = useState(false)
+   const [img, setImg] = useState()
+
    
    useEffect(() => {
 
@@ -61,16 +67,19 @@ function App(props){
 
    async function startApp() {
     // Create the playlist
-    console.log("testest")
+    setLoading(true)
     var response = await createPlaylist(spotifyApi,playlistName);
     var playlistId = response.id;
     
     // Get the songs based on the seeds
     var uris = await getRecommendations(spotifyApi,seeds);
-    console.log(uris);
 
     // Add to playlists
-    spotifyApi.addTracksToPlaylist(playlistId,uris)
+    await spotifyApi.addTracksToPlaylist(playlistId,uris)
+
+    setImg(await getPlaylistCover(spotifyApi,playlistId))
+    setLoading(false)
+    setDone(true)
   }
 
   function getData(data,type){ 
@@ -117,10 +126,23 @@ function App(props){
 
           <RangeSlider type="Instrumentalness" min={0} max={1} start={0} end={0} step={.1} sendData={getData}/>
 
-          <Button size="small" variant="contained" color="primary" onClick={() => startApp()}>
-            Submit
+          <Button size="small" variant="contained" color="primary" onClick={() => startApp()} disabled={loading}  
+          > { loading && (<i className="fa fa-refresh fa-spin"></i>)}
+              {loading && <span>Generating Playlist</span>}
+              {!loading && !done && <span>Submit</span>} 
+              {done && <span>Done!</span>}          
           </Button>
-          
+          <img src={img}></img>
+          {console.log("yuha,",img)}
+          {/* 
+            Key
+            Liveness
+            loudness
+            mode
+            speechiness
+            time_signature
+            valence
+          */}
         </div>
       }</Container>
     </div>
