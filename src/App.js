@@ -72,12 +72,25 @@ function App(props){
     var playlistId = response.id;
     
     // Get the songs based on the seeds
-    var uris = await getRecommendations(spotifyApi,seeds);
+    //var uris = await getRecommendations(spotifyApi,seeds);
+    var uris;
+    await getRecommendations(spotifyApi,seeds).then((value) => {
+       uris = value
+       console.log(uris)
+    }, (errorReason) => {
+      console.log("No tracks for the musica", errorReason)
+    });
 
     // Add to playlists
     await spotifyApi.addTracksToPlaylist(playlistId,uris)
 
-    setImg(await getPlaylistCover(spotifyApi,playlistId))
+    await getPlaylistCover(spotifyApi,playlistId).then((value) => {
+        setImg(value)
+    }, (errorReason) => {
+      console.log("No image:", errorReason)
+    });
+
+
     setLoading(false)
     setDone(true)
   }
@@ -132,8 +145,6 @@ function App(props){
               {!loading && !done && <span>Submit</span>} 
               {done && <span>Done!</span>}          
           </Button>
-          <img src={img}></img>
-          {console.log("yuha,",img)}
           {/* 
             Key
             Liveness
@@ -143,6 +154,8 @@ function App(props){
             time_signature
             valence
           */}
+
+          <img src={img} alt="Playlist here"></img>
         </div>
       }</Container>
     </div>
