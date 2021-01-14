@@ -1,13 +1,13 @@
 export async function getPlaylistCover(spotifyApi,playlistID){
-    let url = "wooho"
+    let obj = "wooho"
     try {
-        await spotifyApi.getPlaylistCoverImage(playlistID)
+        await spotifyApi.getPlaylist(playlistID)
         .then((response) => {
-            url = response[1].url;
+            obj = response
         })
     }
     catch(err){
         console.log(err);
     }
-    return url;
+    return obj;
 }

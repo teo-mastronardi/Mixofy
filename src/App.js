@@ -53,6 +53,8 @@ function App(props){
    const [done, setDone] = useState(false)
    const [img, setImg] = useState()
 
+   const [linkToPlaylist, setLinkToPlaylist] = useState("")
+
    
    useEffect(() => {
 
@@ -80,12 +82,12 @@ function App(props){
     }, (errorReason) => {
       console.log("No tracks for the musica", errorReason)
     });
-
     // Add to playlists
     await spotifyApi.addTracksToPlaylist(playlistId,uris)
 
     await getPlaylistCover(spotifyApi,playlistId).then((value) => {
-        setImg(value)
+        setImg(value.images[1].url)
+        setLinkToPlaylist(value.external_urls.spotify)
     }, (errorReason) => {
       console.log("No image:", errorReason)
     });
@@ -154,8 +156,8 @@ function App(props){
             time_signature
             valence
           */}
-
-          <img src={img} alt="Playlist here"></img>
+          <a href={linkToPlaylist}>
+          <img src={img}/></a>
         </div>
       }</Container>
     </div>
